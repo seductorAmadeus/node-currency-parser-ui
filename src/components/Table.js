@@ -3,16 +3,28 @@ import './Table.css';
 import PropTypes from 'prop-types';
 
 const sortTypes = {
-  up: {
-    class: 'sort-up',
-    fn: (a, b) => a.usd_price - b.usd_price || a.last_updated - b.last_updated,
+  up_price: {
+    class: 'sort-up-price',
+    fn: (a, b) => a.usd_price - b.usd_price,
   },
-  down: {
-    class: 'sort-down',
-    fn: (a, b) => b.usd_price - a.usd_price || b.last_updated - a.last_updated,
+  up_date: {
+    class: 'sort-up-date',
+    fn: (a, b) => new Date(a.last_updated) - new Date(b.last_updated),
   },
-  default: {
-    class: 'sort',
+  down_price: {
+    class: 'sort-down-price',
+    fn: (a, b) => b.usd_price - a.usd_price,
+  },
+  down_date: {
+    class: 'sort-down-date',
+    fn: (a, b) => new Date(b.last_updated) - new Date(a.last_updated),
+  },
+  default_price: {
+    class: 'sort-default-price',
+    fn: (a, b) => a,
+  },
+  default_date: {
+    class: 'sort-default-date',
     fn: (a, b) => a,
   },
 };
@@ -21,21 +33,42 @@ export default class Table extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentSort: 'default',
+      currentSort: 'default_price',
     };
   }
 
-  onSortChange = () => {
+  onPriceSortChange = () => {
     const {currentSort} = this.state;
     let nextSort;
 
-    if (currentSort === 'down') nextSort = 'up';
-    else if (currentSort === 'up') nextSort = 'default';
-    else if (currentSort === 'default') nextSort = 'down';
+    if (!['down_price', 'up_price', 'default_price'].includes(currentSort)) {
+      this.setState({currentSort: 'down_price'});
+    } else {
+      if (currentSort === 'down_price') nextSort = 'up_price';
+      else if (currentSort === 'up_price') nextSort = 'default_price';
+      else if (currentSort === 'default_price') nextSort = 'down_price';
 
-    this.setState({
-      currentSort: nextSort,
-    });
+      this.setState({
+        currentSort: nextSort,
+      });
+    }
+  };
+
+  onDateSortChange = () => {
+    const {currentSort} = this.state;
+    let nextSort;
+
+    if (!['down_date', 'up_date', 'default_date'].includes(currentSort)) {
+      this.setState({currentSort: 'down_date'});
+    } else {
+      if (currentSort === 'down_date') nextSort = 'up_date';
+      else if (currentSort === 'up_date') nextSort = 'default_date';
+      else if (currentSort === 'default_date') nextSort = 'down_date';
+
+      this.setState({
+        currentSort: nextSort,
+      });
+    }
   };
 
   render() {
@@ -57,17 +90,17 @@ export default class Table extends Component {
             {/* eslint-disable-next-line jsx-a11y/interactive-supports-focus */}
             <div
               role="button"
-              className={`cell active-sort ${sortTypes[currentSort].class}`}
-              onClick={this.onSortChange}
-              onKeyPress={this.onSortChange}>
+              className={`cell active-sort price ${sortTypes[currentSort].class}`}
+              onClick={this.onPriceSortChange}
+              onKeyPress={this.onPriceSortChange}>
               USD price
             </div>
             {/* eslint-disable-next-line jsx-a11y/interactive-supports-focus */}
             <div
               role="button"
-              className={`cell active-sort ${sortTypes[currentSort].class}`}
-              onClick={this.onSortChange}
-              onKeyPress={this.onSortChange}>
+              className={`cell active-sort date ${sortTypes[currentSort].class}`}
+              onClick={this.onDateSortChange}
+              onKeyPress={this.onDateSortChange}>
               Date
             </div>
             <div className="cell">Volume 24h</div>

@@ -13,14 +13,16 @@
   background: #2f312e;
 }
 
-.sort-up {
+.date.sort-up-date,
+.price.sort-up-price {
   box-sizing: border-box !important;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
-  border-top: 3px solid #f00 !important;
+  border-top: 3px solid green !important;
 }
 
-.sort-down {
+.date.sort-down-date,
+.price.sort-down-price {
   box-sizing: border-box !important;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -108,7 +110,6 @@
 .row .cell:nth-child(1) {
   width: 50px;
   padding-left: 10px;
-  padding-right: 10px;
 }
 
 .row .cell {
