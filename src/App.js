@@ -23,7 +23,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Table data={currencyData} />
+        <Table currency={currencyData} />
       </header>
     </div>
   );
